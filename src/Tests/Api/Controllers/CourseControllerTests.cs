@@ -147,4 +147,44 @@ public class CourseControllerTests
         // Assert
         result.Should().BeOfType<NoContentResult>();
     }
+
+    [Test]
+    [AutoMoqData]
+    public async Task GetMostDemanded_ShouldReturnOkWithCourses(
+        List<CourseDto> courses,
+        [Frozen] Mock<IMediator> mediatorMock,
+        CourseController sut)
+    {
+        // Arrange
+        mediatorMock.Setup(x => x.Send(It.IsAny<GetMostDemandedCoursesQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(courses);
+
+        // Act
+        var result = await sut.GetMostDemanded(10);
+
+        // Assert
+        result.Result.Should().BeOfType<OkObjectResult>();
+        var okResult = result.Result as OkObjectResult;
+        okResult!.Value.Should().BeEquivalentTo(courses);
+    }
+
+    [Test]
+    [AutoMoqData]
+    public async Task GetMostDemanded_WithCustomLimit_ShouldSendQueryWithLimit(
+        List<CourseDto> courses,
+        [Frozen] Mock<IMediator> mediatorMock,
+        CourseController sut)
+    {
+        // Arrange
+        var expectedLimit = 5;
+        mediatorMock.Setup(x => x.Send(It.Is<GetMostDemandedCoursesQuery>(q => q.Limit == expectedLimit), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(courses);
+
+        // Act
+        var result = await sut.GetMostDemanded(expectedLimit);
+
+        // Assert
+        result.Result.Should().BeOfType<OkObjectResult>();
+        mediatorMock.Verify(x => x.Send(It.Is<GetMostDemandedCoursesQuery>(q => q.Limit == expectedLimit), It.IsAny<CancellationToken>()), Times.Once);
+    }
 }

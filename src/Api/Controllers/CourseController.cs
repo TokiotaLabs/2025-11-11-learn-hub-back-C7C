@@ -38,6 +38,23 @@ namespace LearnHub.Back.Api.Controllers
         }
 
         /// <summary>
+        /// Gets the most demanded courses
+        /// </summary>
+        /// <param name="limit">Number of courses to return (default: 10)</param>
+        /// <returns>List of most demanded courses ordered by enrollment count</returns>
+        /// <response code="200">Returns the list of most demanded courses</response>
+        [HttpGet("most-demanded")]
+        [SwaggerOperation(
+            Summary = "Gets most demanded courses",
+            Description = "Retrieves a list of the most demanded courses based on enrollment count")]
+        [ProducesResponseType(typeof(List<CourseDto>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<CourseDto>>> GetMostDemanded([FromQuery] int limit = 10)
+        {
+            var result = await _mediator.Send(new GetMostDemandedCoursesQuery { Limit = limit });
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Gets a specific course by its ID
         /// </summary>
         /// <param name="id">Course ID</param>
