@@ -1,0 +1,16 @@
+﻿<Project>
+  <PropertyGroup>
+    <MicrosoftAspNetCoreAuthenticationJwtBearerVersion>8.0.0</MicrosoftAspNetCoreAuthenticationJwtBearerVersion>
+    <MicrosoftAspNetCoreMvcNewtonsoftJsonVersion>8.0.0</MicrosoftAspNetCoreMvcNewtonsoftJsonVersion>
+    <MicrosoftAspNetCoreMvcVersion>2.3.0</MicrosoftAspNetCoreMvcVersion>
+    <MediatRVersion>12.4.1</MediatRVersion>
+    <MicrosoftEntityFrameworkCoreVersion>9.0.2</MicrosoftEntityFrameworkCoreVersion>
+    <MicrosoftEntityFrameworkCoreSqlServerVersion>9.0.2</MicrosoftEntityFrameworkCoreSqlServerVersion>
+    <MicrosoftEntityFrameworkCoreToolsVersion>9.0.2</MicrosoftEntityFrameworkCoreToolsVersion>
+    <NUnitVersion>4.3.2</NUnitVersion>
+    <MoqVersion>4.20.72</MoqVersion>
+    <FluentValidationVersion>10.3.6</FluentValidationVersion>
+    <FluentValidationDependencyInjectionExtensionsVersion>10.3.0</FluentValidationDependencyInjectionExtensionsVersion>
+    <AutoMapperVersion>10.1.1</AutoMapperVersion>
+  </PropertyGroup>
+</Project>
