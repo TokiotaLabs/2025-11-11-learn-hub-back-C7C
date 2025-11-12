@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using LearnHub.Back.Api.Middleware;
+using LearnHub.Back.Application.Configuration;
 using LearnHub.Back.Application.Handlers.Course;
 using LearnHub.Back.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Configure settings
+builder.Services.Configure<CourseSettings>(builder.Configuration.GetSection("CourseSettings"));
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
