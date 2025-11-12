@@ -1,8 +1,10 @@
+using LearnHub.Back.Application.Configuration;
 using LearnHub.Back.Application.DTOs;
 using LearnHub.Back.Application.Handlers.Course;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net.Mime;
 
@@ -15,10 +17,12 @@ namespace LearnHub.Back.Api.Controllers
     public class CourseController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly CourseSettings _courseSettings;
 
-        public CourseController(IMediator mediator)
+        public CourseController(IMediator mediator, IOptions<CourseSettings> courseSettings)
         {
             _mediator = mediator;
+            _courseSettings = courseSettings.Value;
         }
 
         /// <summary>
@@ -34,6 +38,24 @@ namespace LearnHub.Back.Api.Controllers
         public async Task<ActionResult<List<CourseDto>>> GetAll()
         {
             var result = await _mediator.Send(new GetAllCoursesQuery());
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Gets the most demanded courses
+        /// </summary>
+        /// <param name="limit">Number of courses to return (default: value from configuration)</param>
+        /// <returns>List of most demanded courses ordered by enrollment count</returns>
+        /// <response code="200">Returns the list of most demanded courses</response>
+        [HttpGet("most-demanded")]
+        [SwaggerOperation(
+            Summary = "Gets most demanded courses",
+            Description = "Retrieves a list of the most demanded courses based on enrollment count")]
+        [ProducesResponseType(typeof(List<CourseDto>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<CourseDto>>> GetMostDemanded([FromQuery] int? limit = null)
+        {
+            var effectiveLimit = limit ?? _courseSettings.DefaultMostDemandedLimit;
+            var result = await _mediator.Send(new GetMostDemandedCoursesQuery { Limit = effectiveLimit });
             return Ok(result);
         }
 
